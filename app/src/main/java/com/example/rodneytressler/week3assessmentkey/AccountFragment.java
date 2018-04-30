@@ -22,6 +22,8 @@ import butterknife.OnClick;
 
 public class AccountFragment extends Fragment {
 
+    private ActivityCallback activityCallback;
+
     @BindView(R.id.name_input)
     protected EditText nameInput;
 
@@ -30,10 +32,12 @@ public class AccountFragment extends Fragment {
 
     @OnClick(R.id.button_finish)
     protected void onFinishButtonClicked(View view) {
-
+        if(nameInput.getText().toString().isEmpty() || classInput.getText().toString().isEmpty()){
+            showAlertDialog("All Fields Required");
+        }else{
+            activityCallback.accountCreated(nameInput,classInput);
+        }
     }
-
-
 
 
     @Nullable
@@ -71,5 +75,13 @@ public class AccountFragment extends Fragment {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    public void attachParent (ActivityCallback activityCallback){
+        this.activityCallback = activityCallback;
+    }
+
+    public interface ActivityCallback {
+        void accountCreated(String name, String accountClass);
     }
 }
